@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="mystyleV2.css">
+    <link rel="stylesheet" href="js/bootstrap.bundle.min.js">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <title>To-Do list for you</title>
+</head>
+
+<body class="background">
+    <div id="parent-center">
+        <div id="inputs">
+            <div class="animate__animated animate__bounceIn">
+                <p class="input-div2">WELCOME!</p>
+                <p class="input-div2">Here you can track, add & view all of your tasks</p>
+            </div>
+            <form id="myForm" style="background-image:url(images/formbg.jpg); height: 185px; text-align: center;">
+                <div style="height:3px"></div>
+                <textarea class="text-scroll" placeholder="Enter your task here.." required id="myTask" rows="2" cols="45"
+                    oninput="validity.valid"></textarea>
+                    <div style="height:5px"></div>
+                Enter your task's Deadline date: <input required name="setTodaysDate" id="deadLineDate" type="date"
+                    oninput="validity.valid">
+                <div style="height:5px"></div>
+                Enter your task's Deadline time: <input required id="deadLineTime" type="time"
+                    oninput="validity.valid"><br>
+                <div style="height: 3px;"></div>
+                <div style="text-align: center;">
+                    <button type="button" onclick="addTask()" class="btn btn-success">Click me to add task</button>
+                    <button type="button" onclick="clearFields()" class="btn btn-warning">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div><br>
+
+    <div id="display" class="row row-cols-1 row-cols-md-3 g-5 task-bg"></div>
+
+
+    <script>
+        // defining variables
+        let display = document.getElementById("display")
+        let myTask = document.getElementById("myTask")
+        let deadLineDate = document.getElementById("deadLineDate")
+        let deadLineTime = document.getElementById("deadLineTime")
+        tasks = JSON.parse(localStorage.getItem("tasks")) || []
+        var today = new Date().toISOString().split('T')[0];
+document.getElementsByName("setTodaysDate")[0].setAttribute('min', today);
+
+        // validation
+        function myValidation() {
+             if (myTask.value == "") {
+             alert("Please enter your task")
+             return false;
+            } else if(deadLineDate.value == ""){
+             alert("Please enter the dead line date for the task")
+             return false; 
+            } else if(deadLineTime.value == ""){
+             alert("Please enter the dead line time for the task")
+             return false;
+            }
+            return true
+        }
+
+        // add task to screen
+        function addTask() {
+            if (!myValidation()) {
+                console.log("invalid")
+                return
+            }
+            console.log("valid")
+            let tempTask = {
+                myTask: myTask.value,
+                deadLineDate: deadLineDate.value,
+                deadLineTime: deadLineTime.value
+            }
+            tasks.push(tempTask)
+            saveToLocaleStorage()
+            buildDisplay()
+            clearFields()
+        }
+
+        // clears input fields
+        function clearFields() {
+            myTask.value = ""
+            deadLineDate.value = ""
+            deadLineTime.value = ""
+        }
+
+        // save to local storage
+        function saveToLocaleStorage() {
+            localStorage.setItem("tasks", JSON.stringify(tasks))
+        }
+
+        // build the display
+        function buildDisplay() {
+            display.innerHTML = ""
+            tasks.forEach((item, i) => {
+                display.innerHTML += `<div class="maincontainer animate__animated animate__fadeInBottomLeft">
+                    <div class="back">
+                        <br><br><br><br>
+                        <button type="button" class="btn btn-outline-danger" onclick="deleteTask(${i})" style="margin-left: 4px;">
+                            <svg width="157" height="30" fill="currentColor" class="bi bi-file-excel-fill" viewBox="0 0 16 16">
+                                <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5.884 4.68 8 7.219l2.116-2.54a.5.5 0 1 1 .768.641L8.651 8l2.233 2.68a.5.5 0 0 1-.768.64L8 8.781l-2.116 2.54a.5.5 0 0 1-.768-.641L7.349 8 5.116 5.32a.5.5 0 1 1 .768-.64z"></path>
+                            </svg>
+                        </button> 
+                    </div>
+                    <div class="front">
+                    <div class="col animate__animated animate__fadeInBottomLeft">
+                        <div class="card ::-webkit-scrollbar ::-webkit-scrollbar-thumb" style="background-image:url(images/note.jpg); height: 253px;overflow: auto;">
+                            <div class="card-body">
+                                <div style="height: 15px;"></div><h4 style="white-space: pre;" class="card-title">${item.myTask}</h4>
+                                    <small class="text-muted">${item.deadLineDate}<br>${item.deadLineTime}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <br><br>`
+
+
+            })
+        }
+
+        // deletes a specific task
+        function deleteTask(i) {
+            if (confirm("ARE YOU SURE THAT YOU'VE COMPLETED THE TASK?") == true) {
+                tasks.splice(i, 1)
+                buildDisplay()
+                saveToLocaleStorage()
+            }
+            console.log(tasks)
+        }
+
+        
+        // load all ongoing tasks Immediately
+        buildDisplay()
+    </script>
+</body>
+
+</html>

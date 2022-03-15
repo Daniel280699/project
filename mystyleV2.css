@@ -1,0 +1,93 @@
+/* input of div style */
+.input-div{
+  margin: 0% auto;
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+}
+/* parent (div) center style */
+#parent-center{
+  text-align: center;
+}
+/* styling for individual input */
+.input {
+  margin: 1% 0%;
+}
+
+.background{
+  background-image: url(images/Bulletinboard.jpg);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  background-attachment: fixed;
+}
+
+.input-div2{
+  font-family:fantasy , papyrus;
+  font-size: 20px;
+}
+
+.task-bg{
+  padding-left: 150px;
+}
+
+.text-scroll{
+  overflow: scroll;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 6px;
+  background-color: transparent;
+  scrollbar-width: thin;
+  box-shadow: inset 0 0 2px grey;
+  opacity: 0.75;
+}
+::-webkit-scrollbar-thumb {
+  background-color: black;
+  opacity: 0.5;
+}
+
+
+.text-size{
+  height: 200px;
+  width: 200px;
+  overflow: auto;
+  overflow-wrap: break-word;
+  scrollbar-color: black;
+  scrollbar-width: thin;
+  border-radius: 5px;
+}
+
+
+.maincontainer
+{
+    width: 210px;
+    height: 255px;
+}
+
+.maincontainer > .front
+{
+    position: absolute;
+    transform: perspective(600px) rotateY(0deg);
+    width: 200px;
+    height: 250px;
+    backface-visibility: hidden; 
+    transition: transform .5s linear 0s;
+} 
+
+.maincontainer > .back
+{
+    position: absolute;
+    transform:  rotateY(90deg);
+    margin-top: 10rem;
+    height: 50px;
+    backface-visibility: hidden;
+    transition:  .4s linear 0s;
+}
+
+.maincontainer:hover > .back
+{
+    transform: perspective(600px) rotateY(0deg);
+}
